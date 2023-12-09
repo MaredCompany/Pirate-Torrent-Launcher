@@ -1,12 +1,13 @@
 import os
 import json
+import copy
 
 
 class CacheSupportiveHandler:
     @staticmethod
     def path_ctor(name: str) -> str:
         return f"parser/cache/{name}.ctor"
-
+    
 
     @staticmethod
     def valid_ctor(name: str) -> bool:
@@ -16,7 +17,7 @@ class CacheSupportiveHandler:
 class CacheTorent:
     @staticmethod
     def add(name_cache: str, data: dict) -> None:
-        if not os.path.exists(CacheSupportiveHandler.path_ctor(name_cache)):
+        if not CacheSupportiveHandler.valid_ctor(name_cache):
             with open(CacheSupportiveHandler.path_ctor(name=name_cache), "w+") as cache:
                 cache.write(json.dumps(data))
         
@@ -26,6 +27,13 @@ class CacheTorent:
         if CacheSupportiveHandler.valid_ctor(name_cache):
             with open(CacheSupportiveHandler.path_ctor(name_cache), "r") as cache:
                 return json.loads(cache.read())
+    
+    
+    @staticmethod
+    def append(name_cache: str, data: dict) -> None:
+        if CacheSupportiveHandler.valid_ctor(name_cache):
+            with open(CacheSupportiveHandler.path_ctor(name_cache), "a") as cache:
+                cache.write(data)
     
     
     @staticmethod 
